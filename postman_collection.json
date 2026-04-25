@@ -1,0 +1,262 @@
+{
+  "info": {
+    "name": "Listing App API",
+    "description": "Complete API collection for the Listing App - A full-stack CRUD application built with Node.js, Express, and MySQL.\n\n## Getting Started\n1. Make sure the server is running (npm start)\n2. The base URL is http://localhost:3000\n3. All endpoints return JSON responses",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Listings",
+      "item": [
+        {
+          "name": "Get All Listings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Retrieve all listings from the database. Returns an array of listing objects sorted by creation date (newest first)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Listing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/listings/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "1"]
+            },
+            "description": "Retrieve a single listing by its ID. Returns the listing object or 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Apartment for Rent\",\n  \"description\": \"Spacious 2-bedroom apartment with modern amenities, located in the heart of downtown. Features include hardwood floors, updated kitchen, and in-unit laundry.\",\n  \"price\": 2500,\n  \"location\": \"Boston, MA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Create a new listing. All fields are required:\n- title: 3-255 characters\n- description: minimum 10 characters\n- price: positive number\n- location: 2-255 characters"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Listing",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Apartment Listing\",\n  \"description\": \"Updated description: Beautiful apartment with all new renovations. Now includes a balcony with city views!\",\n  \"price\": 2800,\n  \"location\": \"Boston, MA - Downtown\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "1"]
+            },
+            "description": "Update an existing listing by ID. All fields are required and subject to the same validation rules as creation."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Listing",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/listings/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "1"]
+            },
+            "description": "Delete a listing by ID. This action cannot be undone."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Validation Tests",
+      "item": [
+        {
+          "name": "Create - Empty Fields (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"description\": \"\",\n  \"price\": \"\",\n  \"location\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Test validation - should return 400 with validation errors for all empty fields."
+          },
+          "response": []
+        },
+        {
+          "name": "Create - Short Title (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"AB\",\n  \"description\": \"This description is long enough\",\n  \"price\": 100,\n  \"location\": \"City\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Test validation - should return 400 because title is less than 3 characters."
+          },
+          "response": []
+        },
+        {
+          "name": "Create - Negative Price (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Valid Title\",\n  \"description\": \"Valid description text\",\n  \"price\": -100,\n  \"location\": \"Valid City\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Test validation - should return 400 because price cannot be negative."
+          },
+          "response": []
+        },
+        {
+          "name": "Create - Valid Listing (Should Pass)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Beautiful Beach House\",\n  \"description\": \"Stunning oceanfront property with panoramic views. Perfect for a relaxing getaway or permanent residence.\",\n  \"price\": 750000,\n  \"location\": \"Malibu, CA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings"]
+            },
+            "description": "Test validation - should return 201 with the created listing."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Cases",
+      "item": [
+        {
+          "name": "Get Non-Existent Listing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/listings/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "99999"]
+            },
+            "description": "Test 404 response - should return 'Listing not found' error."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Non-Existent Listing",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated\",\n  \"description\": \"Updated description here\",\n  \"price\": 1000,\n  \"location\": \"New Location\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/listings/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "99999"]
+            },
+            "description": "Test 404 response - should return 'Listing not found' error."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Non-Existent Listing",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/listings/99999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "listings", "99999"]
+            },
+            "description": "Test 404 response - should return 'Listing not found' error."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Listing App</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                📋 Listing App
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">
+                    ← Back to Listings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Create New Listing</h1>
+            <p class="page-subtitle">Fill out the form below to add a new listing</p>
+        </div>
+
+        <!-- Error Message -->
+        <% if (error) { %>
+            <div class="alert alert-error">
+                ❌ <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Create Listing Form -->
+        <div class="form-container">
+            <form action="/listings" method="POST" class="listing-form">
+                
+                <!-- Title Field -->
+                <div class="form-group">
+                    <label for="title" class="form-label">
+                        Title <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        class="form-input"
+                        placeholder="Enter a catchy title for your listing"
+                        value="<%= listing.title %>"
+                        required
+                        maxlength="255"
+                    >
+                    <small class="form-hint">Maximum 255 characters</small>
+                </div>
+
+                <!-- Description Field -->
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        Description <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        class="form-input form-textarea"
+                        placeholder="Describe your listing in detail..."
+                        required
+                        rows="5"
+                    ><%= listing.description %></textarea>
+                    <small class="form-hint">Minimum 10 characters</small>
+                </div>
+
+                <!-- Price and Location Row -->
+                <div class="form-row">
+                    <!-- Price Field -->
+                    <div class="form-group">
+                        <label for="price" class="form-label">
+                            Price ($) <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="price" 
+                            name="price" 
+                            class="form-input"
+                            placeholder="0.00"
+                            value="<%= listing.price %>"
+                            required
+                            min="0"
+                            step="0.01"
+                            max="99999999.99"
+                        >
+                        <small class="form-hint">Enter price in dollars</small>
+                    </div>
+
+                    <!-- Location Field -->
+                    <div class="form-group">
+                        <label for="location" class="form-label">
+                            Location <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location" 
+                            class="form-input"
+                            placeholder="e.g., New York, NY"
+                            value="<%= listing.location %>"
+                            required
+                            maxlength="255"
+                        >
+                        <small class="form-hint">City, State or full address</small>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="/" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        ✨ Create Listing
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-container">
+            <h3>💡 Tips for a Great Listing</h3>
+            <ul>
+                <li>Use a clear, descriptive title that highlights the main feature</li>
+                <li>Include all relevant details in the description</li>
+                <li>Set a competitive price based on market research</li>
+                <li>Provide an accurate location to attract local buyers</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <%= new Date().getFullYear() %> Listing App. Built with Node.js, Express, MySQL & EJS</p>
+        </div>
+    </footer>
+</body>
+</html>

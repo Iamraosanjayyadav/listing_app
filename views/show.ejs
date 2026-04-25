@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= listing ? listing.title : 'Listing Not Found' %> - Listing App</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                📋 Listing App
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">
+                    ← Back to Listings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Success Message -->
+        <% if (message) { %>
+            <div class="alert alert-success">
+                ✅ <%= message %>
+            </div>
+        <% } %>
+
+        <% if (listing) { %>
+            <!-- Listing Details -->
+            <div class="detail-container">
+                <!-- Back Link -->
+                <a href="/" class="back-link">
+                    ← Back to All Listings
+                </a>
+
+                <!-- Listing Card -->
+                <div class="detail-card">
+                    <!-- Header -->
+                    <div class="detail-header">
+                        <h1 class="detail-title"><%= listing.title %></h1>
+                        <div class="detail-price">
+                            $<%= Number(listing.price).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }) %>
+                        </div>
+                    </div>
+
+                    <!-- Meta Info -->
+                    <div class="detail-meta">
+                        <span class="meta-item">
+                            📍 Location: <%= listing.location %>
+                        </span>
+                        <span class="meta-item">
+                            📅 Listed: <%= new Date(listing.created_at).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }) %>
+                        </span>
+                        <span class="meta-item">
+                            🆔 ID: #<%= listing.id %>
+                        </span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="detail-description">
+                        <h2>Description</h2>
+                        <p><%= listing.description %></p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="detail-actions">
+                        <a href="/listings/<%= listing.id %>/edit" class="btn btn-primary">
+                            ✏️ Edit Listing
+                        </a>
+                        <form action="/listings/<%= listing.id %>?_method=DELETE" 
+                              method="POST"
+                              class="inline-form"
+                              onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');">
+                            <button type="submit" class="btn btn-danger">
+                                🗑️ Delete Listing
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Additional Info Card -->
+                <div class="info-card">
+                    <h3>📌 Listing Information</h3>
+                    <table class="info-table">
+                        <tr>
+                            <th>Listing ID</th>
+                            <td><%= listing.id %></td>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td><%= listing.title %></td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>$<%= Number(listing.price).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }) %></td>
+                        </tr>
+                        <tr>
+                            <th>Location</th>
+                            <td><%= listing.location %></td>
+                        </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td><%= new Date(listing.created_at).toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) %></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        <% } else { %>
+            <!-- Not Found State -->
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h2>Listing Not Found</h2>
+                <% if (error) { %>
+                    <p><%= error %></p>
+                <% } else { %>
+                    <p>The listing you're looking for doesn't exist or has been removed.</p>
+                <% } %>
+                <a href="/" class="btn btn-primary">Go Back to Listings</a>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <%= new Date().getFullYear() %> Listing App. Built with Node.js, Express, MySQL & EJS</p>
+        </div>
+    </footer>
+</body>
+</html>
